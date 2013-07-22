@@ -14,8 +14,7 @@ import com.example.library_netapi.NetParameters;
 import com.example.library_netapi.Runn;
 
 public class MainActivity extends Activity {
-	private static final String LOGIN_PATH = "http://app.9998.tv/User/App_Login.ashx?UserName=username&UserPwd=password";
-	private static final String CHECK_SESSION_PATH = "http://app.9998.tv/User/Session";
+	private static final String PATH = "http://app.9998.tv";
 	private Handler handler = new Handler();
 
 	@Override
@@ -30,7 +29,10 @@ public class MainActivity extends Activity {
 	 * @param view
 	 */
 	public void startLogin(View view) {
-		NetParameters np = new NetParameters(LOGIN_PATH);
+		NetParameters np = new NetParameters(PATH);
+		np.addPath("User", "App_Login.ashx");
+		np.addParams("UserName", "username");
+		np.addParams("UserPwd", "userpwd");
 		NetApi.request(MainActivity.this, handler, np, new RequestListener() {
 			@Override
 			public void onComplete(final JSONObject result) {
@@ -51,7 +53,8 @@ public class MainActivity extends Activity {
 	 * @param view
 	 */
 	public void checkSession(View view) {
-		NetParameters np = new NetParameters(CHECK_SESSION_PATH);
+		NetParameters np = new NetParameters(PATH);
+		np.addPath("User", "Session");
 		NetApi.request(MainActivity.this, handler, np, new RequestListener() {
 			@Override
 			public void onComplete(final JSONObject result) {
