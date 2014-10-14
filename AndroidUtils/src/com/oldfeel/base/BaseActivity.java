@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.VideoView;
 import android.widget.ZoomControls;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mobstat.StatService;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,7 +48,6 @@ public abstract class BaseActivity extends SwipeBackActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
-			SDKInitializer.initialize(getApplicationContext());
 			ViewConfiguration mconfig = ViewConfiguration.get(this);
 			Field menuKeyField = ViewConfiguration.class
 					.getDeclaredField("sHasPermanentMenuKey");
