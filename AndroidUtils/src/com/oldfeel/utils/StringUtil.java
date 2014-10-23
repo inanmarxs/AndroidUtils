@@ -318,4 +318,18 @@ public class StringUtil {
 		}
 		return url.substring(url.lastIndexOf("/") + 1);
 	}
+
+	/**
+	 * 获取带单位的距离
+	 * 
+	 * @param distance
+	 * @return
+	 */
+	public static String friendly_distance(double distance) {
+		if (distance / 1000 > 1) {
+			return new java.text.DecimalFormat("#.00").format(distance / 1000)
+					+ "KM";
+		}
+		return new java.text.DecimalFormat("#.00").format(distance) + "M";
+	}
 }

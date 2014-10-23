@@ -24,4 +24,14 @@ public abstract class BaseItem implements Serializable {
 	public String getTime(String time) {
 		return StringUtil.friendly_time(time);
 	}
+
+	/**
+	 * 获取距离
+	 * 
+	 * @param distance
+	 * @return
+	 */
+	public String getDistance(double distance) {
+		return StringUtil.friendly_distance(distance);
+	}
 }
