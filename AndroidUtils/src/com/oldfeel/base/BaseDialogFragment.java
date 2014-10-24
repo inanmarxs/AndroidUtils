@@ -32,7 +32,7 @@ public class BaseDialogFragment extends DialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setStyle(DialogFragment.STYLE_NO_TITLE,
-				R.style.Theme_AppCompat_CompactMenu_Dialog);
+				R.style.Theme_AppCompat_Light_Dialog);
 	}
 
 	@Override
