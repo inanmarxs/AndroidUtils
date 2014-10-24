@@ -26,7 +26,6 @@ import android.widget.ZoomControls;
 import com.baidu.mobstat.StatService;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.oldfeel.app.BaseConstant;
 import com.oldfeel.app.MyApplication;
 import com.oldfeel.utils.DialogUtil;
 import com.oldfeel.utils.ETUtil;
@@ -208,10 +207,6 @@ public abstract class BaseActivity extends SwipeBackActivity {
 
 	public void cancelPd() {
 		DialogUtil.getInstance().cancelPd();
-	}
-
-	public long getUserid() {
-		return BaseConstant.getInstance().getUserId();
 	}
 
 	@Override

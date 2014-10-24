@@ -10,7 +10,6 @@ package com.oldfeel.app;
 public class BaseConstant {
 
 	private static BaseConstant baseConstant;
-	private long userId; // 用户id
 	private int pageSize = 20; // listview 每次加载的item数量
 	private String rootUrl; // 网络请求的根url
 
@@ -19,14 +18,6 @@ public class BaseConstant {
 			baseConstant = new BaseConstant();
 		}
 		return baseConstant;
-	}
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
 	}
 
 	public int getPageSize() {

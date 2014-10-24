@@ -147,8 +147,4 @@ public abstract class BaseBaseAdapter<T> extends BaseAdapter {
 	public boolean isAddOver() {
 		return isAddOver;
 	}
-
-	public long getUserid() {
-		return BaseConstant.getInstance().getUserId();
-	}
 }
