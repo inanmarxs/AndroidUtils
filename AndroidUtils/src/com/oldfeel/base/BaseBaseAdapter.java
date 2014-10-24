@@ -20,7 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.oldfeel.app.BaseConstant;
+import com.oldfeel.conf.BaseConstant;
 import com.oldfeel.utils.R;
 import com.oldfeel.utils.ViewUtil;
 

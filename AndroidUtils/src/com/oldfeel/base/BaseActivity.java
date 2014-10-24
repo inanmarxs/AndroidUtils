@@ -26,7 +26,7 @@ import android.widget.ZoomControls;
 import com.baidu.mobstat.StatService;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.oldfeel.app.MyApplication;
+import com.oldfeel.conf.MyApplication;
 import com.oldfeel.utils.DialogUtil;
 import com.oldfeel.utils.ETUtil;
 import com.oldfeel.utils.R;

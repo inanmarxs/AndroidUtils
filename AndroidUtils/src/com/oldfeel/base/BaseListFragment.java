@@ -14,7 +14,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.oldfeel.app.BaseConstant;
+import com.oldfeel.conf.BaseConstant;
 import com.oldfeel.utils.DialogUtil;
 import com.oldfeel.utils.JSONUtil;
 import com.oldfeel.utils.NetUtil;

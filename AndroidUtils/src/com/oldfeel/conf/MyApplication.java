@@ -1,4 +1,4 @@
-package com.oldfeel.app;
+package com.oldfeel.conf;
 
 import java.util.ArrayList;
 

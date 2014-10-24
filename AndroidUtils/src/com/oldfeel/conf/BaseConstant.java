@@ -1,4 +1,4 @@
-package com.oldfeel.app;
+package com.oldfeel.conf;
 
 /**
  * 框架中需要的一些常量

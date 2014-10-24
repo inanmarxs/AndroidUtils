@@ -29,7 +29,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
 
-import com.oldfeel.app.BaseConstant;
+import com.oldfeel.conf.BaseConstant;
 import com.qiniu.IO;
 import com.qiniu.JSONObjectRet;
 import com.qiniu.PutExtra;
