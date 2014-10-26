@@ -30,6 +30,12 @@ public class DialogUtil {
 		toast.show();
 	}
 
+	public void cancelToast() {
+		if (toast != null) {
+			toast.cancel();
+		}
+	}
+
 	private ProgressDialog pd;
 
 	public void showPd(Context context, String message) {
