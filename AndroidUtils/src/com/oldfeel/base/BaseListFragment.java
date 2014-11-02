@@ -5,12 +5,14 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -29,7 +31,7 @@ import com.oldfeel.utils.R;
  * 
  *         Created on: 2014年3月2日
  */
-public abstract class BaseListFragment extends ListFragment implements
+public abstract class BaseListFragment extends BaseFragment implements
 		OnRefreshListener, OnScrollListener {
 
 	protected NetUtil netUtil;
@@ -38,33 +40,50 @@ public abstract class BaseListFragment extends ListFragment implements
 	private int lastVisibleIndex;
 	private int page;
 	private ProgressBar progressBar;
+	private ListView listView;
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		ViewGroup viewGroup = (ViewGroup) view;
-		mPullToRefreshLayout = new PullToRefreshLayout(viewGroup.getContext());
-		ActionBarPullToRefresh
-				.from((ActionBarActivity) getActivity())
-				.insertLayoutInto(viewGroup)
-				.theseChildrenArePullable(android.R.id.list, android.R.id.empty)
-				.listener(this).setup(mPullToRefreshLayout);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.single_list_view, container,
+				false);
+		mPullToRefreshLayout = (PullToRefreshLayout) view
+				.findViewById(R.id.pull_to_refresh_layout);
+		listView = (ListView) view.findViewById(R.id.listview);
+        ActionBarPullToRefresh.from((ActionBarActivity) getActivity())
+                .allChildrenArePullable()
+                .listener(this)
+                .setup(mPullToRefreshLayout);
+		return view;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		initHeaderView();
 		progressBar = new ProgressBar(getActivity());
 		getListView().addFooterView(progressBar);
 		initAdapter();
-		setListAdapter(adapter);
-		setListShownNoAnimation(true);
+		getListView().setAdapter(adapter);
 		getListView().setOnScrollListener(this);
 		getListView().setOnCreateContextMenuListener(this);
+		getListView().setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				position = position - listView.getHeaderViewsCount();
+				BaseListFragment.this.onItemClick(position);
+			}
+		});
 		mPullToRefreshLayout.setRefreshing(true);
 		if (netUtil != null) {
 			getData(0);
 		}
+	}
+
+	public ListView getListView() {
+		return listView;
 	}
 
 	public void setNetUtil(NetUtil netUtil) {
@@ -112,7 +131,8 @@ public abstract class BaseListFragment extends ListFragment implements
 	}
 
 	protected void refreshComplete() {
-		if (adapter.getCount() < BaseConstant.getInstance().getPageSize()) {
+		if (adapter.getCount() - listView.getHeaderViewsCount() < BaseConstant
+				.getInstance().getPageSize()) {
 			if (isVisible() && getListView() != null && progressBar != null) {
 				getListView().removeFooterView(progressBar);
 			}
@@ -128,7 +148,8 @@ public abstract class BaseListFragment extends ListFragment implements
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
-				&& lastVisibleIndex == getListAdapter().getCount()) {
+				&& lastVisibleIndex == adapter.getCount()
+						- listView.getHeaderViewsCount()) {
 			if (!adapter.isAddOver()) {
 				getData(++page);
 			} else { // 加载完成后移除底部进度条
@@ -143,18 +164,13 @@ public abstract class BaseListFragment extends ListFragment implements
 		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
 	}
 
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		position = position - l.getHeaderViewsCount();
-		onItemClick(position);
-	}
-
 	public void showToast(String text) {
 		DialogUtil.getInstance().showToast(getActivity(), text);
 	}
 
 	public abstract void onItemClick(int position);
+
+	public abstract void initHeaderView();
 
 	public abstract void initAdapter();
 

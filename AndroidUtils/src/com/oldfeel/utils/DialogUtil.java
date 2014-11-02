@@ -2,8 +2,10 @@ package com.oldfeel.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.widget.Toast;
 
@@ -18,6 +20,29 @@ public class DialogUtil {
 			tu = new DialogUtil();
 		}
 		return tu;
+	}
+
+	private Dialog dialog;
+
+	/**
+	 * 显示一个单一的dialog
+	 * 
+	 * @param activity
+	 * @param title
+	 * @param message
+	 * @param okListener
+	 * @param cancelListener
+	 */
+	public void showSingleDialog(Activity activity, String title,
+			String message, DialogInterface.OnClickListener okListener,
+			DialogInterface.OnClickListener cancelListener) {
+		if (dialog != null && dialog.isShowing()) {
+			dialog.cancel();
+		}
+		dialog = new AlertDialog.Builder(activity).setTitle(title)
+				.setMessage(message).setPositiveButton("确定", okListener)
+				.setNegativeButton("取消", cancelListener).create();
+		dialog.show();
 	}
 
 	private static Toast toast;
