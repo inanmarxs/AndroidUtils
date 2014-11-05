@@ -10,8 +10,6 @@ import android.util.Log;
  *         Created on: 2014-1-10
  */
 public class LogUtil {
-	/** true 为开启打印logcat,false为不打印 */
-	public static final boolean IS_DEBUG = true;
 
 	/**
 	 * 打印日志
@@ -19,7 +17,7 @@ public class LogUtil {
 	 * @param log
 	 */
 	public static void showLog(String log) {
-		if (IS_DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Log.d("example", log);
 		}
 	}
