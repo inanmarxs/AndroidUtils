@@ -8,8 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -221,26 +219,32 @@ public class ImageUtil {
 	}
 
 	/**
-	 * 使用当前时间戳拼接一个唯一的文件名
+	 * 拍照保存的绝对路径
 	 * 
-	 * @param format
+	 * @param activity
+	 * @param path
+	 *            图片保存的路径
+	 * @param mark
+	 *            图片名字的标示,用以区分不同用户同一时间拍摄的照片
 	 * @return
 	 */
-	public static String getTempFileName() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss_SS");
-		String fileName = format.format(new Timestamp(System
-				.currentTimeMillis()));
-		return fileName;
-	}
-
-	/**
-	 * 获取照相机使用的目录
-	 * 
-	 * @return
-	 */
-	public static String getCamerPath() {
-		return Environment.getExternalStorageDirectory() + File.separator
-				+ "FounderNews" + File.separator;
+	public static File getCameraTempFile(Activity activity, String path,
+			Object mark) {
+		String storageState = Environment.getExternalStorageState();
+		if (storageState.equals(Environment.MEDIA_MOUNTED)) {
+			File savedir = new File(path);
+			if (!savedir.exists()) {
+				savedir.mkdirs();
+			}
+		} else {
+			DialogUtil.getInstance()
+					.showToast(activity, "无法保存上传的头像，请检查SD卡是否挂载");
+			return null;
+		}
+		String timeStamp = StringUtil.getTimeStamp();
+		// 照片命名
+		String fileName = timeStamp + "_" + mark + ".jpg";
+		return new File(path + "/" + fileName);
 	}
 
 	/**
