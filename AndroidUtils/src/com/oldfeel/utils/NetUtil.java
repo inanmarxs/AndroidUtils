@@ -2,7 +2,6 @@ package com.oldfeel.utils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -23,16 +22,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
 
 import com.oldfeel.conf.BaseConstant;
-import com.qiniu.IO;
-import com.qiniu.JSONObjectRet;
-import com.qiniu.PutExtra;
 
 /**
  * 网络接口,post请求string或者get请求json,里面只包含一个线程,只能同时发送一个网络请求
@@ -165,6 +160,10 @@ public class NetUtil extends Handler {
 							super.run();
 							if (stringListener != null) {
 								stringListener.onComplete(result);
+							}
+							if (!JsonUtil.isSuccess(result)) {
+								DialogUtil.getInstance().showToast(activity,
+										JsonUtil.getData(result));
 							}
 						}
 					});
@@ -421,43 +420,4 @@ public class NetUtil extends Handler {
 		this.failListener = cancelListener;
 	}
 
-	/**
-	 * 上传文件,七牛云专用
-	 *
-	 * @param text
-	 * @param file
-	 * @param uptoken
-	 * @param key
-	 * @param requestStringListener
-	 */
-	public void postFile(String text, String key, File file, String uptoken,
-			final RequestStringListener requestStringListener) {
-		showPd(text);
-		PutExtra extra = new PutExtra();
-		IO.putFile(getActivity(), uptoken, key, Uri.fromFile(file), extra,
-				new JSONObjectRet() {
-					@Override
-					public void onProcess(long current, long total) {
-					}
-
-					@Override
-					public void onSuccess(JSONObject resp) {
-						requestStringListener.onComplete(resp.toString());
-						if (pd != null) {
-							pd.cancel();
-							pd = null;
-						}
-					}
-
-					@Override
-					public void onFailure(Exception ex) {
-						requestStringListener.onComplete(ex.toString());
-						if (pd != null) {
-							pd.cancel();
-							pd = null;
-						}
-						LogUtil.showLog("fail " + ex);
-					}
-				});
-	}
 }

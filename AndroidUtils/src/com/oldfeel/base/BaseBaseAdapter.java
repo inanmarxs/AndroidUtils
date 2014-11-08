@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oldfeel.conf.BaseConstant;
+import com.oldfeel.utils.DialogUtil;
 import com.oldfeel.utils.R;
 import com.oldfeel.utils.ViewUtil;
 
@@ -89,6 +90,11 @@ public abstract class BaseBaseAdapter<T> extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
+	public void remove(int index) {
+		list.remove(index);
+		notifyDataSetChanged();
+	}
+
 	public void clear() {
 		list.clear();
 		notifyDataSetChanged();
@@ -146,5 +152,9 @@ public abstract class BaseBaseAdapter<T> extends BaseAdapter {
 
 	public boolean isAddOver() {
 		return isAddOver;
+	}
+
+	public void showToast(String text) {
+		DialogUtil.getInstance().showToast(context, text);
 	}
 }

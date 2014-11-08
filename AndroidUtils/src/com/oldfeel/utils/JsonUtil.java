@@ -10,7 +10,7 @@ import org.json.JSONObject;
  * 
  *         Created on: 2014年2月17日
  */
-public class JSONUtil {
+public class JsonUtil {
 	/**
 	 * 判断是否成功
 	 * 
@@ -27,26 +27,10 @@ public class JSONUtil {
 		return false;
 	}
 
-	/**
-	 * 获取返回的message
-	 * 
-	 * @param result
-	 * @return
-	 */
-	public static String getMessage(String result) {
+	public static String getData(String result) {
 		try {
 			JSONObject json = new JSONObject(result);
-			return json.getString("Data");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public static JSONObject getData(String result) {
-		try {
-			JSONObject json = new JSONObject(result);
-			return json.getJSONObject("Data");
+			return json.get("Data").toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

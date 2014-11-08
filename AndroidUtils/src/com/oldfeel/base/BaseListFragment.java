@@ -18,7 +18,7 @@ import android.widget.ProgressBar;
 
 import com.oldfeel.conf.BaseConstant;
 import com.oldfeel.utils.DialogUtil;
-import com.oldfeel.utils.JSONUtil;
+import com.oldfeel.utils.JsonUtil;
 import com.oldfeel.utils.NetUtil;
 import com.oldfeel.utils.NetUtil.OnNetFailListener;
 import com.oldfeel.utils.NetUtil.RequestStringListener;
@@ -50,10 +50,9 @@ public abstract class BaseListFragment extends BaseFragment implements
 		mPullToRefreshLayout = (PullToRefreshLayout) view
 				.findViewById(R.id.pull_to_refresh_layout);
 		listView = (ListView) view.findViewById(R.id.listview);
-        ActionBarPullToRefresh.from((ActionBarActivity) getActivity())
-                .allChildrenArePullable()
-                .listener(this)
-                .setup(mPullToRefreshLayout);
+		ActionBarPullToRefresh.from((ActionBarActivity) getActivity())
+				.allChildrenArePullable().listener(this)
+				.setup(mPullToRefreshLayout);
 		return view;
 	}
 
@@ -120,10 +119,10 @@ public abstract class BaseListFragment extends BaseFragment implements
 
 			@Override
 			public void onComplete(String result) {
-				if (JSONUtil.isSuccess(result)) {
+				if (JsonUtil.isSuccess(result)) {
 					adapter.addResult(page, result);
 				} else {
-					showToast("加载失败," + JSONUtil.getMessage(result));
+					showToast(JsonUtil.getData(result));
 				}
 				refreshComplete();
 			}

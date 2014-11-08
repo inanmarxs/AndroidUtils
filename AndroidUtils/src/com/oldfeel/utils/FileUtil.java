@@ -14,8 +14,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
+import android.provider.OpenableColumns;
 import android.util.Log;
 
 /**
@@ -330,7 +333,9 @@ public class FileUtil {
 			try {
 				File path = Environment.getExternalStorageDirectory();
 				StatFs stat = new StatFs(path.getPath());
+				@SuppressWarnings("deprecation")
 				long blockSize = stat.getBlockSize();
+				@SuppressWarnings("deprecation")
 				long availableBlocks = stat.getAvailableBlocks();
 				freeSpace = availableBlocks * blockSize / 1024;
 			} catch (Exception e) {
@@ -709,5 +714,4 @@ public class FileUtil {
 		}
 		return filePath.substring(filePath.lastIndexOf("/") + 1);
 	}
-
 }

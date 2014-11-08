@@ -125,4 +125,20 @@ public class ETUtil {
 			editText.setFocusable(focusable);
 		}
 	}
+
+	/**
+	 * 判断edittext中内容,如果为空这提示"必填"
+	 * 
+	 * @param editTexts
+	 */
+	public static boolean isHaveNull(EditText... editTexts) {
+		for (EditText editText : editTexts) {
+			if (isEmpty(editText)) {
+				editText.requestFocus();
+				editText.setError("必填");
+				return false;
+			}
+		}
+		return true;
+	}
 }
