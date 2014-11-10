@@ -3,6 +3,9 @@ package com.oldfeel.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +18,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oldfeel.conf.BaseConstant;
@@ -38,7 +38,7 @@ public abstract class BaseBaseAdapter<T> extends BaseAdapter {
 	protected LayoutInflater inflater;
 	protected Context context;
 	protected ArrayList<T> list = new ArrayList<T>();
-	protected JsonArray array = new JsonArray();
+	protected String array = "[]";
 	private boolean isAddOver = false; // 是否加载完成
 
 	public BaseBaseAdapter(Context context) {
@@ -59,8 +59,15 @@ public abstract class BaseBaseAdapter<T> extends BaseAdapter {
 		if (page == 0) {
 			clear();
 		}
-		array = (new Gson().fromJson(result, JsonObject.class))
-				.getAsJsonArray("Data");
+		try {
+			JSONObject json = new JSONObject(result);
+			String data = json.getString("Data");
+			if (data != null) {
+				array = data;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void add(T t) {
