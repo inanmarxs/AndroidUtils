@@ -136,9 +136,9 @@ public class ETUtil {
 			if (isEmpty(editText)) {
 				editText.requestFocus();
 				editText.setError("必填");
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 }
