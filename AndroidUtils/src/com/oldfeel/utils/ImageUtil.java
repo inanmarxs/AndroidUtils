@@ -717,4 +717,30 @@ public class ImageUtil {
 				Thumbnails.MINI_KIND);
 		return bitmap;
 	}
+
+	/**
+	 * android 4.4以后要用该方法将uri转换为filepath
+	 * 
+	 * @param activity
+	 * @param uri
+	 * @return
+	 */
+	public static String getImagePath(Activity activity, Uri uri) {
+		Cursor cursor = activity.getContentResolver().query(uri, null, null,
+				null, null);
+		cursor.moveToFirst();
+		String document_id = cursor.getString(0);
+		document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+		cursor.close();
+
+		cursor = activity.getContentResolver().query(
+				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				null, MediaStore.Images.Media._ID + " = ? ",
+				new String[] { document_id }, null);
+		cursor.moveToFirst();
+		String path = cursor.getString(cursor
+				.getColumnIndex(MediaStore.Images.Media.DATA));
+		cursor.close();
+		return path;
+	}
 }
