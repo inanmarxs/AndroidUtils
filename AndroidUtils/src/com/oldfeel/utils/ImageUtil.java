@@ -435,6 +435,12 @@ public class ImageUtil {
 		return newbmp;
 	}
 
+	/**
+	 * 将图片转换为 200 * 200 大小
+	 * 
+	 * @param bitmap
+	 * @return
+	 */
 	public static Bitmap scaleBitmap(Bitmap bitmap) {
 		// 获取这个图片的宽和高
 		int width = bitmap.getWidth();
