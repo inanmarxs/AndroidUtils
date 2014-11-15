@@ -3,7 +3,6 @@ package com.oldfeel.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.VideoView;
 
 import com.baidu.mobstat.StatService;
+import com.oldfeel.interfaces.FragmentListener;
 import com.oldfeel.utils.DialogUtil;
 import com.oldfeel.utils.ETUtil;
 import com.oldfeel.utils.R;
@@ -25,8 +25,7 @@ import com.oldfeel.utils.ViewUtil;
  *         Created on: 2014-1-14
  */
 public class BaseDialogFragment extends DialogFragment {
-
-	public OkListener okListener;
+	public FragmentListener fragmentListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,33 +35,15 @@ public class BaseDialogFragment extends DialogFragment {
 	}
 
 	@Override
-	public void onActivityCreated(Bundle arg0) {
-		super.onActivityCreated(arg0);
+	public void onActivityCreated(Bundle bundle) {
+		super.onActivityCreated(bundle);
+		if (fragmentListener != null) {
+			fragmentListener.onCreated();
+		}
 	}
 
-	/**
-	 * 确定按钮监听
-	 * 
-	 * @author oldfeel
-	 * 
-	 *         Created on: 2014-1-15
-	 */
-	public interface OkListener {
-		public void ok(Object... objects);
-	}
-
-	public void setListener(OkListener okListener) {
-		this.okListener = okListener;
-	}
-
-	public interface onCreatedListener {
-		public void created(Fragment fragment);
-	}
-
-	protected onCreatedListener createdListener;
-
-	public void setOnCreatedListener(onCreatedListener createdListener) {
-		this.createdListener = createdListener;
+	public void setOnFragmentListener(FragmentListener fragmentListener) {
+		this.fragmentListener = fragmentListener;
 	}
 
 	public VideoView getVideoView(View view, int id) {
