@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.VideoView;
 
 import com.baidu.mobstat.StatService;
@@ -28,13 +30,6 @@ public class BaseDialogFragment extends DialogFragment {
 	public FragmentListener fragmentListener;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setStyle(DialogFragment.STYLE_NO_TITLE,
-				R.style.Theme_AppCompat_Light_Dialog);
-	}
-
-	@Override
 	public void onActivityCreated(Bundle bundle) {
 		super.onActivityCreated(bundle);
 		if (fragmentListener != null) {
@@ -48,6 +43,10 @@ public class BaseDialogFragment extends DialogFragment {
 
 	public VideoView getVideoView(View view, int id) {
 		return ViewUtil.getVideoView(view, id);
+	}
+
+	public ListView getListView(View view, int id) {
+		return ViewUtil.getListView(view, id);
 	}
 
 	public EditText getEditText(View view, int id) {
@@ -64,6 +63,10 @@ public class BaseDialogFragment extends DialogFragment {
 
 	public Button getButton(View view, int id) {
 		return ViewUtil.getButton(view, id);
+	}
+
+	public ImageButton getImageButton(View view, int id) {
+		return ViewUtil.getImageButton(view, id);
 	}
 
 	public void showToast(String text) {
