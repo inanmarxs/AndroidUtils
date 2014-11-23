@@ -1,11 +1,9 @@
 package com.oldfeel.base;
 
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,34 +23,32 @@ import com.oldfeel.utils.NetUtil.RequestStringListener;
 import com.oldfeel.utils.R;
 
 /**
- * 下拉刷新,上拉加载更多的fragment
  * 
  * @author oldfeel
  * 
- *         Created on: 2014年3月2日
+ *         Create on: 2014年11月23日
  */
 public abstract class BaseListFragment extends BaseFragment implements
 		OnRefreshListener, OnScrollListener {
-
+	private SwipeRefreshLayout mSwipeRefreshLayout;
+	private ListView mListView;
 	protected NetUtil netUtil;
 	protected BaseBaseAdapter<?> adapter;
-	private PullToRefreshLayout mPullToRefreshLayout;
 	private int lastVisibleIndex;
 	private int page;
 	private ProgressBar progressBar;
-	private ListView listView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.single_list_view, container,
+		View view = inflater.inflate(R.layout.base_list_fragment, container,
 				false);
-		mPullToRefreshLayout = (PullToRefreshLayout) view
-				.findViewById(R.id.pull_to_refresh_layout);
-		listView = (ListView) view.findViewById(R.id.listview);
-		ActionBarPullToRefresh.from((ActionBarActivity) getActivity())
-				.allChildrenArePullable().listener(this)
-				.setup(mPullToRefreshLayout);
+		mSwipeRefreshLayout = (SwipeRefreshLayout) view
+				.findViewById(R.id.swiperefresh);
+		mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_color_1,
+				R.color.swipe_color_2, R.color.swipe_color_3,
+				R.color.swipe_color_4);
+		mListView = (ListView) view.findViewById(R.id.listview);
 		return view;
 	}
 
@@ -65,24 +61,24 @@ public abstract class BaseListFragment extends BaseFragment implements
 		initAdapter();
 		getListView().setAdapter(adapter);
 		getListView().setOnScrollListener(this);
-		getListView().setOnCreateContextMenuListener(this);
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				position = position - listView.getHeaderViewsCount();
+				position = position - mListView.getHeaderViewsCount();
 				BaseListFragment.this.onItemClick(position);
 			}
 		});
-		mPullToRefreshLayout.setRefreshing(true);
 		if (netUtil != null) {
 			getData(0);
 		}
+		mSwipeRefreshLayout.setOnRefreshListener(this);
+		mSwipeRefreshLayout.setRefreshing(true);
 	}
 
 	public ListView getListView() {
-		return listView;
+		return mListView;
 	}
 
 	public void setNetUtil(NetUtil netUtil) {
@@ -130,17 +126,17 @@ public abstract class BaseListFragment extends BaseFragment implements
 	}
 
 	protected void refreshComplete() {
-		if (adapter.getCount() - listView.getHeaderViewsCount() < BaseConstant
+		if (adapter.getCount() - mListView.getHeaderViewsCount() < BaseConstant
 				.getInstance().getPageSize()) {
 			if (isVisible() && getListView() != null && progressBar != null) {
 				getListView().removeFooterView(progressBar);
 			}
 		}
-		mPullToRefreshLayout.setRefreshComplete();
+		mSwipeRefreshLayout.setRefreshing(false);
 	}
 
 	@Override
-	public void onRefreshStarted(View view) {
+	public void onRefresh() {
 		getData(0);
 	}
 
@@ -148,7 +144,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleIndex == adapter.getCount()
-						- listView.getHeaderViewsCount()) {
+						- mListView.getHeaderViewsCount()) {
 			if (!adapter.isAddOver()) {
 				getData(++page);
 			} else { // 加载完成后移除底部进度条
